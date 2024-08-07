@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MagazynAPI.Migrations
 {
     [DbContext(typeof(MagazynDbContext))]
-    [Migration("20240805174721_Init")]
+    [Migration("20240807072118_Init")]
     partial class Init
     {
         /// <inheritdoc />

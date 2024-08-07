@@ -4,8 +4,8 @@ namespace MagazynAPI.Entities
 {
     public class MagazynDbContext : DbContext
     {
-        private const string _connectionString = 
-            "Server=(DESKTOP-5P0BQ1B);Database=Storage;Trusted_Connection=True;";
+        private const string _connectionString =
+            "Server=localhost;Database=Magazyn;Trusted_Connection=True;TrustServerCertificate=true;";
 
         public DbSet<Storage> Storages { get; set; }
         public DbSet<Address>Addresses { get; set; }
@@ -25,6 +25,7 @@ namespace MagazynAPI.Entities
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            
             optionsBuilder.UseSqlServer(_connectionString);
         }
     }
