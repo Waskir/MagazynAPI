@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MagazynAPI.Migrations
 {
-    [DbContext(typeof(MagazynDbContext))]
+    [DbContext(typeof(StorageDbContext))]
     partial class MagazynDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -31,7 +31,8 @@ namespace MagazynAPI.Migrations
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("PostalCode")
                         .IsRequired()
@@ -39,7 +40,8 @@ namespace MagazynAPI.Migrations
 
                     b.Property<string>("Street")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -118,7 +120,7 @@ namespace MagazynAPI.Migrations
             modelBuilder.Entity("MagazynAPI.Entities.Item", b =>
                 {
                     b.HasOne("MagazynAPI.Entities.Storage", "Storage")
-                        .WithMany("Item")
+                        .WithMany("Itemes")
                         .HasForeignKey("StorageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -145,7 +147,7 @@ namespace MagazynAPI.Migrations
 
             modelBuilder.Entity("MagazynAPI.Entities.Storage", b =>
                 {
-                    b.Navigation("Item");
+                    b.Navigation("Itemes");
                 });
 #pragma warning restore 612, 618
         }

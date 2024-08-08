@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MagazynAPI.Migrations
 {
     [DbContext(typeof(StorageDbContext))]
-    [Migration("20240807072118_Init")]
-    partial class Init
+    [Migration("20240807193240_AddressColimnAdjustmen")]
+    partial class AddressColimnAdjustmen
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,7 +42,8 @@ namespace MagazynAPI.Migrations
 
                     b.Property<string>("Street")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -121,7 +122,7 @@ namespace MagazynAPI.Migrations
             modelBuilder.Entity("MagazynAPI.Entities.Item", b =>
                 {
                     b.HasOne("MagazynAPI.Entities.Storage", "Storage")
-                        .WithMany("Item")
+                        .WithMany("Itemes")
                         .HasForeignKey("StorageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -148,7 +149,7 @@ namespace MagazynAPI.Migrations
 
             modelBuilder.Entity("MagazynAPI.Entities.Storage", b =>
                 {
-                    b.Navigation("Item");
+                    b.Navigation("Itemes");
                 });
 #pragma warning restore 612, 618
         }

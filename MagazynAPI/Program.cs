@@ -1,21 +1,38 @@
+ using System.Reflection;
+ using System.Runtime.CompilerServices;
  using MagazynAPI;
+ using MagazynAPI.Entities;
+ using AutoMapper;
 
- var builder = WebApplication.CreateBuilder(args);
+ internal class Program
+{
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers(); 
- builder.Services.AddTransient<IWeatherForcastService, WeatherForcastService>();
+        builder.Services.AddControllers(); 
+ 
+        builder.Services.AddDbContext<StorageDbContext>();
+        builder.Services.AddScoped<StorageSeeder>();
+        builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 
-var app = builder.Build();
+        var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+        var scope = app.Services.CreateScope();
+        var seeder = scope.ServiceProvider.GetRequiredService<StorageSeeder>();
+        seeder.Seed();
 
-app.UseHttpsRedirection();
 
-app.UseAuthorization();
+        app.UseHttpsRedirection();
 
-app.MapControllers();
+        app.UseAuthorization();
 
-app.Run();
+        app.MapControllers();
+
+        app.Run();
+    }
+}

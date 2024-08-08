@@ -2,7 +2,7 @@
 
 namespace MagazynAPI.Entities
 {
-    public class MagazynDbContext : DbContext
+    public class StorageDbContext : DbContext
     {
         private const string _connectionString =
             "Server=localhost;Database=Magazyn;Trusted_Connection=True;TrustServerCertificate=true;";
@@ -21,6 +21,16 @@ namespace MagazynAPI.Entities
             modelBuilder.Entity<Item>()
                 .Property(d => d.Name)
                 .IsRequired();
+
+            modelBuilder.Entity<Address>()
+                .Property(a=>a.Street)
+                .IsRequired()
+                .HasMaxLength(50);
+            modelBuilder.Entity<Address>()
+                .Property(a=>a.City)
+                .IsRequired()
+                .HasMaxLength(50);
+                
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
