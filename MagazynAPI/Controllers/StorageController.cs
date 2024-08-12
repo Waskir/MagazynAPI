@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MagazynAPI.Entities;
 using MagazynAPI.Models;
+using MagazynAPI.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,25 +10,46 @@ namespace MagazynAPI.Controllers
     [Route("api/storage")]
     public class StorageController : ControllerBase
     {
-        private readonly StorageDbContext _dbContext;
-        private readonly IMapper _mapper;
+        private readonly IStorageService _storageService;
 
-        public StorageController(StorageDbContext dbContext, IMapper mapper)
+
+        public StorageController(IStorageService storageService)
         {
-            _dbContext = dbContext;
-            _mapper = mapper;
+            _storageService = storageService;
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult Delete([FromRoute] int id)
+        {
+           var isDeleted = _storageService.Delete(id);
+
+           if (isDeleted)
+           {
+               return NoContent();
+           }
+
+           return NotFound();
+        }
+
+        [HttpPost]
+        public ActionResult CreateStorage([FromBody] CreateStorageDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var id = _storageService.Create(dto);
+
+            return Created($"/api/storage/{id}", null);
+
+
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<StorageDto>> Getall()
         {
-            var storages = _dbContext
-                .Storages
-                .Include(r => r.Address)
-                .Include(r => r.Itemes)
-                .ToList();
-
-            var storagesDto = _mapper.Map<List<StorageDto>>(storages);
+            var storagesDto = _storageService.GetAll();
 
             return Ok(storagesDto);
 
@@ -36,21 +58,17 @@ namespace MagazynAPI.Controllers
         [HttpGet("{id}")]
         public ActionResult<StorageDto> Get([FromRoute] int id)
         {
-            var storage = _dbContext
-                .Storages
-                .Include(r => r.Address)
-                .Include(r => r.Itemes)
-                .FirstOrDefault(s => s.Id == id);
+            var storage = _storageService.GetById(id);
 
             if (storage is null)
             {
                 return NotFound();
             }
 
-            var storageDto = _mapper.Map<StorageDto>(storage);
+            return Ok(storage);
 
-            return Ok(storageDto);
         }
     }
 }
+
  

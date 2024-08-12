@@ -3,6 +3,7 @@
  using MagazynAPI;
  using MagazynAPI.Entities;
  using AutoMapper;
+ using MagazynAPI.Service;
 
  internal class Program
 {
@@ -17,6 +18,7 @@
         builder.Services.AddDbContext<StorageDbContext>();
         builder.Services.AddScoped<StorageSeeder>();
         builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        builder.Services.AddScoped<IStorageService, StorageService>();
 
 
         var app = builder.Build();
